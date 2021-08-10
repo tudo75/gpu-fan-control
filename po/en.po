@@ -1,0 +1,101 @@
+# GPU Fan Control
+# Copyright (C) 2021 Nicola Tudino
+#
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: com.github.tudo75.gpu-fan-control\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-08-10 01:58+0200\n"
+"PO-Revision-Date: 2021-08-10 01:58+0200\n"
+"Last-Translator: Nicola Tudino <tudo75@gmail.com>\n"
+"Language-Team: \n"
+"Language: en\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 2.3\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Poedit-Basepath: ../src\n"
+"X-Poedit-SearchPath-0: Application.vala\n"
+
+#: Application.vala:72 Application.vala:429 Application.vala:433
+#: Application.vala:449 Application.vala:453 Application.vala:474
+#: Application.vala:478
+msgid "Error"
+msgstr "Error"
+
+#: Application.vala:134
+msgid "About us"
+msgstr "About us"
+
+#: Application.vala:167
+msgid "Initialize Nvidia Xconfig"
+msgstr "Initialize Nvidia Xconfig"
+
+#: Application.vala:180
+msgid "Reboot the system"
+msgstr "Reboot the system"
+
+#: Application.vala:198
+msgid "Refresh"
+msgstr "Refresh"
+
+#: Application.vala:209
+msgid "Save"
+msgstr "Save"
+
+#: Application.vala:213
+msgid "First run config"
+msgstr "First run config"
+
+#: Application.vala:228
+msgid "Set fan speed"
+msgstr "Set fan speed"
+
+#: Application.vala:421 Application.vala:472
+msgid "Info"
+msgstr "Info"
+
+#: Application.vala:421
+msgid "Success! New X configuration file written to /etc/X11/xorg.conf"
+msgstr "Success! New X configuration file written to /etc/X11/xorg.conf"
+
+#: Application.vala:446
+msgid "Reboot"
+msgstr "Reboot"
+
+#: Application.vala:446
+msgid "Do you want to reboot?"
+msgstr "Do you want to reboot?"
+
+#: Application.vala:453
+msgid "Reboot is required to implement the changes"
+msgstr "Reboot is required to implement the changes"
+
+#: Application.vala:472
+msgid "Fan Speed Set To "
+msgstr "Fan Speed Set To "
+
+#: Application.vala:503
+msgid "GUI fan controller for Nvidia GPU"
+msgstr "GUI fan controller for Nvidia GPU"
+
+#: Application.vala:504
+msgid "Copyright"
+msgstr "Copyright @ 2021 Nicola Tudino"
+
+#: Application.vala:540 Application.vala:545
+msgid "Close"
+msgstr "Close"
+
+#: Application.vala:550
+msgid "Yes"
+msgstr "Yes"
+
+#: Application.vala:551
+msgid "No"
+msgstr "No"
+
+#~ msgid "Set speed"
+#~ msgstr "Set speed"

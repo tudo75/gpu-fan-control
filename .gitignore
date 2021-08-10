@@ -6,6 +6,7 @@ run.sh
 *.pot
 *.mo
 *-test.desktop
+doc
 
 Makefile.in
 Makefile
@@ -20,9 +21,9 @@ Makefile
 .dirstamp
 .libs
 libvala-*.vapi
+nvml.vapi
 
 build
-build-aux
 config.*
 aclocal.m4
 autom4te.cache

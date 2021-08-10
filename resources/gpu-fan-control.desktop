@@ -1,0 +1,11 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=GPU Fan Control
+Comment=GUI fan controller for Nvidia GPU
+Comment[it]=GPU per la gestione delle ventole delle schede video Nvidia
+Exec=com.github.tudo75.gpu-fan-control
+Icon=gpu-fan-control
+Terminal=false
+Categories=GTK;GNOME;Utility;
+StartupNotify=true
