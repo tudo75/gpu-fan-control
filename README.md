@@ -39,19 +39,23 @@ The appliction need:
 
 ## Installation
 
-To install the app:
+To install the app, open terminal and:
 
-<code>TODO</code>
+    git clone https://github.com/tudo75/gpu-fan-control.git
+    cd gpu-fan-control
+    meson setup build
+    ninja -C build 
+    ninja -C build install
 
 ## Usage
 
 1. Open application through the created menu launcher or from terminal 
 
-    <code>gpu-faan-control</code>
+    gpu-fan-control
 
 2. Click on: <i>"Initialize Nvidia Xconfig"</i>
 4. If you receive a positive confirmation dialog then click on: <i>"Reboot"</i>.<br/>
-   If you receive an error message, you should install the <code>nvidia-smi</code> package and retry
+   If you receive an error message, you should install the <code>nvidia-smi</code> and <code>nvidia-settings</code> packages and retry
 1. After <i>Reboot</i> reopen app and set desired speed
 
 ## TODO
@@ -60,4 +64,5 @@ To install the app:
 * [ ] Handle multiple Nvidia GPU on same system
 * [ ] Create a daemon/service to apply custom setting on boot
 * [ ] Add a logging system
+* [ ] Replace nvidia-smi results with a custom panel
 
