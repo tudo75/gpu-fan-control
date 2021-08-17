@@ -35,6 +35,8 @@ namespace GpuFanControl {
         private bool my_debug;
         private int min_range;
         private int max_range;
+
+        private Pango.Layout layout;
         
         public Meter (Gtk.Orientation orientation, int min, int max, bool scale_on_resize = false, bool debug = false) {
             if ( min > max) {
@@ -79,8 +81,8 @@ namespace GpuFanControl {
             var x0_rect1 = (double) ((double) get_my_width () / 100) * 4.5;
             var x0_rect2 = (double) ((double) get_my_width () / 100) * 52.5;
             var w_rect = (double) ((double) get_my_width () / 100) * 43;
-            var h_rect = (double) ((double) get_my_height () / 100) * 3.5;
-            var y0_rect = (double) ((double) get_my_height () / 100) * 4.5;
+            var h_rect = (double) ((double) get_my_height () / 100) * 3.2;
+            var y0_rect = (double) ((double) get_my_height () / 100) * 4.2;
 
             if (!vertical) { // rotate 90°
                 x0_rect1 = (double) ((double) get_my_height () / 100) * 4.5;
@@ -159,6 +161,24 @@ namespace GpuFanControl {
              }
             
             cr.stroke ();
+            cr.restore ();
+
+            // draw label
+            cr.save ();
+            this.layout = Pango.cairo_create_layout (cr);
+
+            // var font_descdesc = Pango.FontDescription.from_string ("Ubuntu Mono " + (radius / 8).to_string ());
+            var font_descdesc = Pango.FontDescription.from_string ("Arial 18");
+            layout.set_font_description (font_descdesc);
+            cr.set_source_rgb (1.0 - (0.6 / 20) * limit, 0.0 + (1.0 / 20) * limit, 0);
+            // cr.set_source_rgb (0.5, 0.5, 0.5);
+            int fontw, fonth;
+            this.layout.get_pixel_size (out fontw, out fonth);
+            layout.set_text (value.to_string () + " °C", -1);
+            cr.move_to (get_my_width () / 2 - fonth * 5 / 4, get_my_height () - fonth * 5 / 4);
+
+            Pango.cairo_update_layout (cr, this.layout);
+            Pango.cairo_show_layout (cr, this.layout);
             cr.restore ();
 
             return false;
