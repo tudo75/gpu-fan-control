@@ -14,7 +14,7 @@ With this app you can set your preferred fan speed for Nvidia GPU (on Linux syst
 <b>Note:</b> Tested on GTX 460
 
 <div align="center">
-    <img src="https://raw.githubusercontent.com/tudo75/gpu-fan-control/main/screenshot.png" alt="GUI Main Image" />
+    <img src="https://raw.githubusercontent.com/tudo75/gpu-fan-control/dev/screenshot.png" alt="GUI Main Image" />
 </div>
 
 - [GPU Fan Control](#gpu-fan-control)
