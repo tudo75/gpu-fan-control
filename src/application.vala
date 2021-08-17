@@ -1,10 +1,50 @@
-namespace GpuFanControl {
+/*
+ * application.vala
+ * 
+ * Copyright 2021 Nicola tudino <nicola.tudino@gmail.com>
+ * 
+ * This file is part of GpuFanControl.
+ *
+ * GpuFanControl is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, version 3 of the License.
+ *
+ * GpuFanControl is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with GpuFanControl.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * SPDX-License-Identifier: GPL-3.0-only
+ */
+
+
+ namespace GpuFanControl {
 
     public class Application : Gtk.Application {
 
         private Gtk.ApplicationWindow window;
         private Gtk.HeaderBar headerbar;
-        private Gtk.Label main_lbl;
+        private Gtk.Grid main_grid;
+        private GpuFanControl.Meter meter;
+        private GpuFanControl.Gauge gauge;
+        private Gtk.Frame meter_frame;
+        private Gtk.Frame gauge_frame;
+        private Gtk.Frame data_frame;
+        // query order: name,fan.speed,timestamp,driver_version,temperature.gpu,memory.used,memory.total,vbios_version,pstate,utilization.gpu,index,memory.free
+        private Gtk.Label gpu_name;
+        private Gtk.Label gpu_driver_version;
+        private Gtk.Label gpu_fan_speed;
+        private Gtk.Label gpu_temp;
+        private Gtk.Label gpu_time;
+        private Gtk.Label gpu_memory_used;
+        private Gtk.Label gpu_vbios_version;
+        private Gtk.Label gpu_pstate;
+        private Gtk.Label gpu_utilization_gpu;
+        private Gtk.Label gpu_index;
+
         private Gtk.ScrolledWindow scroll_window;
         private Gtk.Box main_box;
         private Gtk.Grid toolbar;
@@ -20,8 +60,8 @@ namespace GpuFanControl {
         private const string APP_ID = "com.github.tudo75.gpu-fan-control";
         private const string APP_LANG_DOMAIN = "gpu-fan-control";
         private const string APP_INSTALL_PREFIX = "/usr/local";
-        private const int APP_WIDTH = 810; //610
-        private const int APP_HEIGHT = 430; //430
+        private int APP_WIDTH; //810
+        private int APP_HEIGHT; //320
         private string error_msg;
 
         // TODO set to false for production
@@ -36,13 +76,18 @@ namespace GpuFanControl {
         public Application () {
             application_id = APP_ID;
             flags |= GLib.ApplicationFlags.HANDLES_OPEN;
+
             // For Wayland: must be the same name of the exec in *.desktop file
             GLib.Environment.set_prgname (APP_ID);
 
+            settings = new GLib.Settings(APP_ID);
+            APP_WIDTH = settings.get_int ("window-width");
+            APP_HEIGHT = settings.get_int ("window-height");
+
             // congfigure i18n localization
             Intl.setlocale (LocaleCategory.ALL, "");
-            // TODO modify for production publishing
             string langpack_dir = Path.build_filename (APP_INSTALL_PREFIX, "share", "locale");
+            // TODO modify for production publishing
             if (DEVEL) {
                 langpack_dir = Path.build_filename ("/", "home", "nick", "gpu-fan-control", "po");
             }
@@ -58,6 +103,9 @@ namespace GpuFanControl {
         public override void activate () {
             window = new Gtk.ApplicationWindow (this);
             window.set_default_size (APP_WIDTH, APP_HEIGHT);
+            // window.set_size_request (APP_WIDTH, APP_HEIGHT);
+            window.set_resizable (false);
+            window.window_position = Gtk.WindowPosition.CENTER;
             Gtk.Window.set_default_icon_name (APP_LANG_DOMAIN);
             init_style ();
             init_widgets ();
@@ -68,6 +116,10 @@ namespace GpuFanControl {
             window.show_all ();
             window.show ();
             window.present ();
+
+            meter.fit_size (meter_frame);
+            gauge.fit_size (gauge_frame);
+
             if (!refresh_smi ()) {
                 show_dialog ("error", _("Error"), error_msg);
                 error_msg = "";
@@ -92,16 +144,33 @@ namespace GpuFanControl {
          */
         private void init_widgets () {
             // init settings retrieve
-            settings = new GLib.Settings(APP_ID);
             headerbar = new Gtk.HeaderBar ();
             about_btn = new Gtk.Button ();
+            
             scroll_window = new Gtk.ScrolledWindow (null, null);
-            main_lbl = new Gtk.Label ("");
+            main_grid = new Gtk.Grid ();
+            data_frame = new Gtk.Frame (_("Gpu data"));
+            meter_frame = new Gtk.Frame (_("Temperature"));
+            gauge_frame = new Gtk.Frame (_("Fan speed"));
+            gpu_name = new Gtk.Label ("");
+            gpu_fan_speed = new Gtk.Label ("");
+            gpu_driver_version = new Gtk.Label ("");
+            gpu_temp = new Gtk.Label ("");
+            gpu_time = new Gtk.Label ("");
+            gpu_memory_used = new Gtk.Label ("");
+            gpu_vbios_version = new Gtk.Label ("");
+            gpu_pstate = new Gtk.Label ("");
+            gpu_utilization_gpu = new Gtk.Label ("");
+            gpu_index = new Gtk.Label ("");
+
             xconfig_btn = new Gtk.Button ();
             reboot_btn = new Gtk.Button ();
             refresh_btn = new Gtk.Button ();
             set_speed_btn = new Gtk.Button ();
             scale = new Gtk.Scale.with_range (Gtk.Orientation.HORIZONTAL, 0, 100, 1);
+
+            meter = new GpuFanControl.Meter (Gtk.Orientation.VERTICAL, 0, 120, true, false);
+            gauge = new GpuFanControl.Gauge (0, 100, GpuFanControl.Gauge.Position.LEFT, true);
 
             // containers
             main_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 5);
@@ -125,7 +194,7 @@ namespace GpuFanControl {
             headerbar.set_show_close_button (true);
 
             Gtk.Box hbox_about_btn = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 6);
-            hbox_about_btn.pack_start(
+            hbox_about_btn.pack_start (
                 new Gtk.Image.from_icon_name (APP_LANG_DOMAIN,  Gtk.IconSize.DND),
                 true,
                 true,
@@ -145,10 +214,138 @@ namespace GpuFanControl {
          * Constructor for the scrollable label in which display nvidia-smi results
          */
         private void init_main_panel () {
-            main_lbl.get_style_context ().add_class ("main_lbl");
-            main_lbl.set_vexpand (true);
-            main_lbl.set_hexpand (true);
-            scroll_window.add (main_lbl);
+            meter.set_size (160, 240);
+            meter.set_halign (Gtk.Align.CENTER);
+            meter.set_hexpand (false);
+            meter.set_vexpand (true);
+            gauge.set_size (140, 240);
+            gauge.set_halign (Gtk.Align.CENTER);
+            gauge.set_hexpand (false);
+            gauge.set_vexpand (true);
+            refresh_smi ();
+
+            meter_frame.set_label_align ((float)0.1, (float)0.5);
+            // meter_frame.set_halign (Gtk.Align.CENTER);
+            meter_frame.add (meter);
+            meter_frame.set_hexpand (false);
+            meter_frame.set_vexpand (true);
+            gauge_frame.set_label_align ((float)0.1, (float)0.5);
+            // gauge_frame.set_halign (Gtk.Align.CENTER);
+            gauge_frame.add (gauge);
+            gauge_frame.set_hexpand (false);
+            gauge_frame.set_vexpand (true);
+            
+            // query order: name,fan.speed,timestamp,driver_version,temperature.gpu,memory.used,memory.total,vbios_version,pstate,utilization.gpu,index,memory.free
+
+            data_frame.set_label_align ((float)0.04, (float)0.5);
+            var data_grid = new Gtk.Grid ();
+            data_grid.set_column_spacing (20);
+            data_grid.set_row_spacing (10);
+            data_grid.set_margin_top (20);
+            data_grid.set_margin_bottom (20);
+            data_grid.set_margin_start (20);
+            data_grid.set_margin_end (20);
+            data_grid.set_column_homogeneous (true);
+            data_grid.set_row_homogeneous (false);
+
+            var data_name = new Gtk.Label (_("Name"));
+            var data_driver_version = new Gtk.Label (_("Driver version"));
+            var data_memory_used = new Gtk.Label (_("Memory used"));
+            var data_temp = new Gtk.Label (_("Temperature"));
+            var data_fan_speed = new Gtk.Label (_("Fan speed"));
+            var data_time = new Gtk.Label (_("Timestamp"));
+            var data_vbios_version = new Gtk.Label (_("VBios version"));
+            var data_pstate = new Gtk.Label (_("Pstate"));
+            var data_utilization_gpu = new Gtk.Label (_("GPU Utilization"));
+            var data_index = new Gtk.Label (_("GPU index"));
+
+            data_name.set_xalign (float.parse ("0.0"));
+            data_driver_version.set_xalign (float.parse ("0.0"));
+            data_memory_used.set_xalign (float.parse ("0.0"));
+            data_temp.set_xalign (float.parse ("0.0"));
+            data_fan_speed.set_xalign (float.parse ("0.0"));
+            data_time.set_xalign (float.parse ("0.0"));
+            data_vbios_version.set_xalign (float.parse ("0.0"));
+            data_pstate.set_xalign (float.parse ("0.0"));
+            data_utilization_gpu.set_xalign (float.parse ("0.0"));
+            data_index.set_xalign (float.parse ("0.0"));
+
+            data_name.get_style_context().add_class("data_title");
+            data_driver_version.get_style_context().add_class("data_title");
+            data_memory_used.get_style_context().add_class("data_title");
+            data_temp.get_style_context().add_class("data_title");
+            data_fan_speed.get_style_context().add_class("data_title");
+            data_time.get_style_context().add_class("data_title");
+            data_vbios_version.get_style_context().add_class("data_title");
+            data_pstate.get_style_context().add_class("data_title");
+            data_utilization_gpu.get_style_context().add_class("data_title");
+            data_index.get_style_context().add_class("data_title");
+
+            // display order: index,name,vbios_version,pstate,driver_version,memory.used,utilization.gpu,fan.speed,temperature.gpu,timestamp
+            data_grid.attach (data_index, 0, 0, 1, 1);
+            data_grid.attach (data_name, 0, 1, 1, 1);
+            data_grid.attach (data_vbios_version, 0, 2, 1, 1);
+            data_grid.attach (data_pstate, 0, 3, 1, 1);
+            data_grid.attach (data_driver_version, 0, 4, 1, 1);
+            data_grid.attach (data_memory_used, 0, 5, 1, 1);
+            data_grid.attach (data_utilization_gpu, 0, 6, 1, 1);
+            data_grid.attach (data_fan_speed, 0, 7, 1, 1);
+            data_grid.attach (data_temp, 0, 8, 1, 1);
+            data_grid.attach (data_time, 0, 9, 1, 1);
+
+            gpu_name.set_xalign (float.parse ("0.0"));
+            gpu_driver_version.set_xalign (float.parse ("0.0"));
+            gpu_memory_used.set_xalign (float.parse ("0.0"));
+            gpu_temp.set_xalign (float.parse ("0.0"));
+            gpu_fan_speed.set_xalign (float.parse ("0.0"));
+            gpu_time.set_xalign (float.parse ("0.0"));
+            gpu_vbios_version.set_xalign (float.parse ("0.0"));
+            gpu_pstate.set_xalign (float.parse ("0.0"));
+            gpu_utilization_gpu.set_xalign (float.parse ("0.0"));
+            gpu_index.set_xalign (float.parse ("0.0"));
+
+            // display order: index,name,vbios_version,pstate,driver_version,memory.used,utilization.gpu,fan.speed,temperature.gpu,timestamp
+            gpu_index.get_style_context().add_class("data_value");
+            gpu_name.get_style_context().add_class("data_value");
+            gpu_driver_version.get_style_context().add_class("data_value");
+            gpu_memory_used.get_style_context().add_class("data_value");
+            gpu_temp.get_style_context().add_class("data_value");
+            gpu_fan_speed.get_style_context().add_class("data_value");
+            gpu_time.get_style_context().add_class("data_value");
+            gpu_vbios_version.get_style_context().add_class("data_value");
+            gpu_pstate.get_style_context().add_class("data_value");
+            gpu_utilization_gpu.get_style_context().add_class("data_value");
+
+            data_grid.attach (gpu_index, 1, 0, 1, 1);
+            data_grid.attach (gpu_name, 1, 1, 1, 1);
+            data_grid.attach (gpu_vbios_version, 1, 2, 1, 1);
+            data_grid.attach (gpu_pstate, 1, 3, 1, 1);
+            data_grid.attach (gpu_driver_version, 1, 4, 1, 1);
+            data_grid.attach (gpu_memory_used, 1, 5, 1, 1);
+            data_grid.attach (gpu_utilization_gpu, 1, 6, 1, 1);
+            data_grid.attach (gpu_fan_speed, 1, 7, 1, 1);
+            data_grid.attach (gpu_temp, 1, 8, 1, 1);
+            data_grid.attach (gpu_time, 1, 9, 1, 1);
+
+            data_grid.set_halign (Gtk.Align.START);
+
+            data_frame.add (data_grid);
+            data_frame.set_hexpand (true);
+            data_frame.set_vexpand (true);
+
+            
+            main_grid.set_column_spacing (10);
+            main_grid.set_row_spacing (10);
+            main_grid.set_margin_top (10);
+            main_grid.set_margin_bottom (10);
+            main_grid.set_margin_start (10);
+            main_grid.set_margin_end (10);
+            main_grid.set_column_homogeneous (false);
+            main_grid.set_row_homogeneous (true);
+            main_grid.set_vexpand (true);
+            main_grid.attach (data_frame, 0, 0, 1, 1);
+            main_grid.attach (meter_frame, 1, 0, 1, 1);
+            main_grid.attach (gauge_frame, 2, 0, 1, 1);
         }
 
         /**
@@ -158,7 +355,7 @@ namespace GpuFanControl {
          */
         private void init_toolbar () {
             Gtk.Box hbox_xconfig_btn = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 6);
-            hbox_xconfig_btn.pack_start(
+            hbox_xconfig_btn.pack_start (
                 new Gtk.Image.from_icon_name ("emblem-system-symbolic", Gtk.IconSize.DND),
                 true,
                 true,
@@ -167,11 +364,11 @@ namespace GpuFanControl {
             hbox_xconfig_btn.pack_start (new Gtk.Label (_("Initialize Nvidia Xconfig")), true, true, 0);
             xconfig_btn.add (hbox_xconfig_btn);
             xconfig_btn.clicked.connect (set_config);
-            if (settings.get_boolean("xconfig-init"))
+            if (settings.get_boolean ("xconfig-init"))
                 xconfig_btn.set_sensitive (false);
 
             Gtk.Box hbox_reboot_btn = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 6);
-            hbox_reboot_btn.pack_start(
+            hbox_reboot_btn.pack_start (
                 new Gtk.Image.from_icon_name ("system-reboot-symbolic", Gtk.IconSize.DND),
                 true,
                 true,
@@ -189,7 +386,7 @@ namespace GpuFanControl {
             scale.set_value (get_fan_speed());
            
             Gtk.Box hbox_refresh_btn = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 6);
-            hbox_refresh_btn.pack_start(
+            hbox_refresh_btn.pack_start (
                 new Gtk.Image.from_icon_name ("view-refresh-symbolic", Gtk.IconSize.DND),
                 true,
                 true,
@@ -200,7 +397,7 @@ namespace GpuFanControl {
             refresh_btn.clicked.connect (refresh_smi_void);
 
             Gtk.Box hbox_set_speed_btn = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 6);
-            hbox_set_speed_btn.pack_start(
+            hbox_set_speed_btn.pack_start (
                 new Gtk.Image.from_icon_name ("document-save-symbolic", Gtk.IconSize.DND),
                 true,
                 true,
@@ -251,13 +448,6 @@ namespace GpuFanControl {
             toolbar.set_row_homogeneous (true);
             toolbar.attach (frame_init_btns, 0, 0, 1, 2);
             toolbar.attach (frame_set_speed, 1, 0, 2, 2);
-            /*
-            toolbar.attach (xconfig_btn, 0, 0, 2, 1);
-            toolbar.attach (reboot_btn, 2, 0, 2, 1);
-            toolbar.attach (speed_lbl, 0, 1, 1, 1);
-            toolbar.attach (scale, 1, 1, 2, 1);
-            toolbar.attach (set_speed_btn, 3, 1, 1, 1);
-             */
         }
 
         /**
@@ -267,7 +457,7 @@ namespace GpuFanControl {
          */
         private void create_window_structure () {
             main_box.set_vexpand (true);
-            main_box.add (scroll_window);
+            main_box.add (main_grid);
             main_box.add (toolbar);
 
             window.add (main_box);
@@ -280,9 +470,9 @@ namespace GpuFanControl {
          *
          * @return a #bool value: true if the command has a successfull result, false otherwise
          */
-        private bool refresh_smi () {
+        private bool refresh_smi () { // query order: name,fan.speed,timestamp,driver_version,temperature.gpu,memory.used,memory.total,vbios_version,pstate,utilization.gpu,index,memory.free
             try {
-                string[] spawn_args = {"nvidia-smi"};
+                string[] spawn_args = {"nvidia-smi", "--query-gpu=name,fan.speed,timestamp,driver_version,temperature.gpu,memory.used,memory.total,vbios_version,pstate,utilization.gpu,index,memory.free", "--format=csv,noheader,nounits"};
                 string[] spawn_env = Environ.get ();
                 string ls_stdout;
                 string ls_stderr;
@@ -299,11 +489,28 @@ namespace GpuFanControl {
 
                 // Output: ````
                 if (ls_stdout != null) {
-                    main_lbl.set_label (ls_stdout);
+                    ls_stdout.strip ();
+                    var rtrn = ls_stdout.split (", ");
+                    print("ls_stdout: " + ls_stdout + "\n");
+
+                    meter.set_percent (int.parse (rtrn[4]));
+                    gauge.set_value (int.parse (rtrn[1]));
+
+                    gpu_name.set_label (rtrn[0]);
+                    gpu_fan_speed.set_label (rtrn[1] + " %");
+                    var now = new DateTime.now_local ();
+                    gpu_time.set_label (now.format ("%x %X"));
+                    gpu_driver_version.set_label (rtrn[3]);
+                    gpu_temp.set_label (rtrn[4] + " °C");
+                    gpu_memory_used.set_label (rtrn[5] + " Mb / " + rtrn[6] + " Mb");
+                    gpu_vbios_version.set_label (rtrn[7]);
+                    gpu_pstate.set_label (rtrn[8]);
+                    gpu_utilization_gpu.set_label ((rtrn[9] == "[Not Supported]") ? _("Not supported") : rtrn[9] + " %");
+                    gpu_index.set_label (rtrn[10]);
+
                     return true;
                 } else if (ls_stderr != null) {
 		            print ("stderr:\n" + ls_stderr);
-                    main_lbl.set_label (ls_stderr);
                     error_msg = ls_stderr;
                     return false;
                 }
@@ -311,7 +518,6 @@ namespace GpuFanControl {
 
             } catch (SpawnError e) {
                 print (e.message);
-                main_lbl.set_label (e.message);
                 error_msg = e.message;
                 return false;
             }
@@ -467,7 +673,7 @@ namespace GpuFanControl {
             // set the gpu for over clock
             bool first_cmd = exec_command ({"nvidia-settings", "-a", "[gpu:0]/GPUFanControlState=1"});
             // command to set the speed
-            bool second_cmd = exec_command ({"nvidia-settings", "-a", "[fan]/GPUTargetFanSpeed=" + val});
+            bool second_cmd = exec_command ({"nvidia-settings", "-a", "[fan:0]/GPUTargetFanSpeed=" + val});
             if (first_cmd && second_cmd) {
                 show_dialog ("info", _("Info"), _("Fan Speed Set To ") + val);
             } else {

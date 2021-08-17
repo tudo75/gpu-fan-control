@@ -1,7 +1,10 @@
 github-dark-theme-markdown.css
 meson-configure.txt
+nvidia-smi-query-gpu.txt
+nvidia-settings-all.txt
 logo.svg
 run.sh
+nvset.sh
 
 *.pot
 *.mo

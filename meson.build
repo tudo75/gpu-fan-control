@@ -18,10 +18,13 @@ gnome = import('gnome')
 dependencies = [
 	dependency('gtk+-3.0', version: '>= 3.20'),
 	dependency('glib-2.0'),
+	dependency('cairo'),
 ]
 
 sources = files(
-    'src/Application.vala',
+    'src/application.vala',
+    'src/meter.vala',
+    'src/gauge.vala',
 )
 
 sources += gnome.compile_resources(
@@ -46,7 +49,9 @@ valadoc = find_program(
     required: false,
 )
 docsrc = [
-    '../src/Application.vala',
+    '../src/application.vala',
+    '../src/meter.vala',
+    '../src/gauge.vala',
 ]
 
 doc = custom_target(

@@ -2,13 +2,13 @@
 <schemalist>
     <schema path="/com/github/tudo75/gpu-fan-control/" id="com.github.tudo75.gpu-fan-control">
         <key name="window-width" type="i">
-            <default>610</default>
+            <default>810</default>
             <summary>Window width</summary>
             <description>The saved width of main window</description>
         </key>
 
         <key name="window-height" type="i">
-            <default>500</default>
+            <default>320</default>
             <summary>Window height</summary>
             <description>The saved height of main window</description>
         </key>

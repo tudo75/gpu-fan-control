@@ -1,23 +1,11 @@
 * {
     font-family: Arial, Ubuntu Mono, monospace;
-    /*font-size: 11pt;*/
 }
 
-.main_lbl {
-    font-family: Ubuntu Mono, monospace;
-    font-size: 1.1em;
-    padding-top: 3pt;
+.data_title {
+    font-weight: 600;
 }
 
-
-/*
-scale value {
-    color: #ff0000;
+frame>label {
+    font-weight: 600;
 }
-
-scale highlight {
-    background: rgb(86, 210, 39);
-    background: linear-gradient(90deg, rgba(86, 210, 39, 1) 0%, rgba(2, 15, 0, 1) 100%);
-    border-color: darker(#2761ff);
-}
-*/

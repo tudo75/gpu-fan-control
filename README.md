@@ -64,5 +64,7 @@ To install the app, open terminal and:
 * [ ] Handle multiple Nvidia GPU on same system
 * [ ] Create a daemon/service to apply custom setting on boot
 * [ ] Add a logging system
-* [ ] Replace nvidia-smi results with a custom panel
+* [x] Replace nvidia-smi results with a custom panel
+* [ ] Add more graphic widgets to the dashboard
+* [ ] Add help window as md or html file
 
