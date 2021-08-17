@@ -51,7 +51,7 @@ To install the app, open terminal and:
 
 1. Open application through the created menu launcher or from terminal 
 
-    gpu-fan-control
+    com.github.tudo75.gpu-fan-control
 
 2. Click on: <i>"Initialize Nvidia Xconfig"</i>
 4. If you receive a positive confirmation dialog then click on: <i>"Reboot"</i>.<br/>
