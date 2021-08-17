@@ -67,6 +67,8 @@
         private int APP_HEIGHT; //320
         private string error_msg;
 
+        private uint timeout_id;
+
         // TODO set to false for production
         private const bool DEVEL = false;
 
@@ -103,7 +105,7 @@
         /**
          * {@inheritDoc}
          */
-        public override void activate () {
+        protected override void activate () {
             window = new Gtk.ApplicationWindow (this);
             window.set_default_size (APP_WIDTH, APP_HEIGHT);
             // window.set_size_request (APP_WIDTH, APP_HEIGHT);
@@ -127,6 +129,18 @@
                 show_dialog ("error", _("Error"), error_msg);
                 error_msg = "";
             };
+
+            // timer for continuosly refreh main panel data
+            timeout_id = Timeout.add_seconds_full (GLib.Priority.DEFAULT, 5, refresh_smi);
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        protected override void shutdown () {
+            print("exit");
+            GLib.Source.remove (timeout_id);
+            base.shutdown ();
         }
 
         /**
