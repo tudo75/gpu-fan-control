@@ -414,11 +414,11 @@
                     xconfig_btn.set_sensitive (false);
                 } else {
                     this.show_dialog ("error", _("Error"), this.get_error_msg ());
-                    error_msg = "";
+                    this.set_error_msg ("");
                 }
             } else {
-                this.show_dialog ("error", _("Error"), error_msg);
-                error_msg = "";
+                this.show_dialog ("error", _("Error"), this.get_error_msg ());
+                this.set_error_msg ("");
             }
         }
 
@@ -433,12 +433,12 @@
             int result = show_dialog ("question", _("Reboot"), _("Do you want to reboot?"));
             if (result == Gtk.ResponseType.YES) {
                 if (!exec_command ({"pkexec", "reboot"})) {
-                    this.show_dialog ("error", _("Error"), error_msg);
-                    error_msg = "";
+                    this.show_dialog ("error", _("Error"), this.get_error_msg ());
+                    this.set_error_msg ("");
                 }
             } else {
                 this.show_dialog ("error", _("Error"), _("Reboot is required to implement the changes"));
-                error_msg = "";
+                this.set_error_msg ("");
             }
         }
 
