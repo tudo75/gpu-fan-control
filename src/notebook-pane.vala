@@ -108,7 +108,7 @@
             gauge.fit_size (gauge_frame);
 
             if (!refresh_smi ()) {
-                app.show_dialog ("error", _("Error"), app.error_msg);
+                app.show_dialog ("error", _("Error"), app.get_error_msg ());
                 app.set_error_msg ("");
             };
 

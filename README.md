@@ -60,9 +60,10 @@ To install the app, open terminal and:
 
 ## TODO
 
-* [ ] Check Nvidia GPU index if there are multiple GPUs
-* [ ] Handle multiple Nvidia GPU on same system
+* [x] Check Nvidia GPU index if there are multiple GPUs
+* [x] Handle multiple Nvidia GPU on same system
 * [ ] Create a daemon/service to apply custom setting on boot
+* [X] Created an automatic refresh of the data
 * [ ] Add a logging system
 * [x] Replace nvidia-smi results with a custom panel
 * [x] Add more graphic widgets to the dashboard
