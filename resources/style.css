@@ -9,3 +9,8 @@
 frame>label {
     font-weight: 600;
 }
+
+notebook tab label {
+    padding: 10px;
+    font-size: 1.1em;
+}

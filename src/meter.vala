@@ -168,7 +168,7 @@ namespace GpuFanControl {
             this.layout = Pango.cairo_create_layout (cr);
 
             // var font_descdesc = Pango.FontDescription.from_string ("Ubuntu Mono " + (radius / 8).to_string ());
-            var font_descdesc = Pango.FontDescription.from_string ("Arial 18");
+            var font_descdesc = Pango.FontDescription.from_string ("Arial 17");
             layout.set_font_description (font_descdesc);
             cr.set_source_rgb (1.0 - (0.6 / 20) * limit, 0.0 + (1.0 / 20) * limit, 0);
             // cr.set_source_rgb (0.5, 0.5, 0.5);

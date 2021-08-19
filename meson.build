@@ -25,6 +25,7 @@ sources = files(
     'src/application.vala',
     'src/meter.vala',
     'src/gauge.vala',
+    'src/notebook-pane.vala',
 )
 
 sources += gnome.compile_resources(
@@ -52,6 +53,7 @@ docsrc = [
     '../src/application.vala',
     '../src/meter.vala',
     '../src/gauge.vala',
+    '../src/notebook-pane.vala',
 ]
 
 doc = custom_target(
