@@ -1,1 +1,5 @@
-src/Application.vala
+src/application.vala
+src/gauge.vala
+src/meter.vala
+src/notebook-pane.vala
+resources/gpu-fan-control.desktop

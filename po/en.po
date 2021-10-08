@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: com.github.tudo75.gpu-fan-control\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-17 20:59+0200\n"
-"PO-Revision-Date: 2021-08-17 20:59+0200\n"
+"POT-Creation-Date: 2021-10-08 16:27+0200\n"
+"PO-Revision-Date: 2021-10-08 16:29+0200\n"
 "Last-Translator: Nicola Tudino <tudo75@gmail.com>\n"
 "Language-Team: \n"
 "Language: en\n"
@@ -17,134 +17,162 @@ msgstr ""
 "X-Generator: Poedit 2.3\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-Basepath: ../src\n"
-"X-Poedit-SearchPath-0: application.vala\n"
-"X-Poedit-SearchPath-1: meter.vala\n"
+"X-Poedit-SearchPath-0: .\n"
 
-#: application.vala:124 application.vala:635 application.vala:639
-#: application.vala:655 application.vala:659 application.vala:680
-#: application.vala:684
-msgid "Error"
-msgstr "Error"
-
-#: application.vala:152
-msgid "Gpu data"
-msgstr "Gpu data"
-
-#: application.vala:153 application.vala:254
-msgid "Temperature"
-msgstr "Temperature"
-
-#: application.vala:154 application.vala:255
-msgid "Fan speed"
-msgstr "Fan speed"
-
-#: application.vala:203
+#: src/application.vala:167
 msgid "About us"
 msgstr "About us"
 
-#: application.vala:251
-msgid "Name"
-msgstr "Name"
-
-#: application.vala:252
-msgid "Driver version"
-msgstr "Driver version"
-
-#: application.vala:253
-msgid "Memory used"
-msgstr "Memory used"
-
-#: application.vala:256
-msgid "Timestamp"
-msgstr "Timestamp"
-
-#: application.vala:257
-msgid "VBios version"
-msgstr "VBios version"
-
-#: application.vala:258
-msgid "Pstate"
-msgstr "Pstate"
-
-#: application.vala:259
-msgid "GPU Utilization"
-msgstr "GPU Utilization"
-
-#: application.vala:260
-msgid "GPU index"
-msgstr "GPU index"
-
-#: application.vala:364
+#: src/application.vala:187
 msgid "Initialize Nvidia Xconfig"
 msgstr "Initialize Nvidia Xconfig"
 
-#: application.vala:377
+#: src/application.vala:200
 msgid "Reboot the system"
 msgstr "Reboot the system"
 
-#: application.vala:395
-msgid "Refresh"
-msgstr "Refresh"
-
-#: application.vala:406
-msgid "Save"
-msgstr "Save"
-
-#: application.vala:410
+#: src/application.vala:218
 msgid "First run config"
 msgstr "First run config"
 
-#: application.vala:425
-msgid "Set fan speed"
-msgstr "Set fan speed"
-
-#: application.vala:508
-msgid "Not supported"
-msgstr "Not supported"
-
-#: application.vala:627 application.vala:678
+#. checking if nvidia-smi is installed
+#. allowing the gpu to overclock manually
+#. success message
+#: src/application.vala:407 src/notebook-pane.vala:540
+#: src/notebook-pane.vala:563
 msgid "Info"
 msgstr "Info"
 
-#: application.vala:627
+#: src/application.vala:407
 msgid "Success! New X configuration file written to /etc/X11/xorg.conf"
 msgstr "Success! New X configuration file written to /etc/X11/xorg.conf"
 
-#: application.vala:652
+#: src/application.vala:415 src/application.vala:419 src/application.vala:435
+#: src/application.vala:439 src/notebook-pane.vala:113
+#: src/notebook-pane.vala:542 src/notebook-pane.vala:546
+#: src/notebook-pane.vala:565 src/notebook-pane.vala:569
+msgid "Error"
+msgstr "Error"
+
+#: src/application.vala:432
 msgid "Reboot"
 msgstr "Reboot"
 
-#: application.vala:652
+#: src/application.vala:432
 msgid "Do you want to reboot?"
 msgstr "Do you want to reboot?"
 
-#: application.vala:659
+#: src/application.vala:439
 msgid "Reboot is required to implement the changes"
 msgstr "Reboot is required to implement the changes"
 
-#: application.vala:678
-msgid "Fan Speed Set To "
-msgstr "Fan Speed Set To "
-
-#: application.vala:709
+#: src/application.vala:464 resources/gpu-fan-control.desktop:6
 msgid "GUI fan controller for Nvidia GPU"
 msgstr "GUI fan controller for Nvidia GPU"
 
-#: application.vala:710
+#: src/application.vala:465
 msgid "Copyright"
 msgstr "Copyright @ 2021 Nicola Tudino"
 
-#: application.vala:746 application.vala:751
+#: src/application.vala:501 src/application.vala:506
 msgid "Close"
 msgstr "Close"
 
-#: application.vala:756
+#: src/application.vala:511
 msgid "Yes"
 msgstr "Yes"
 
-#: application.vala:757
+#. return 1
+#: src/application.vala:512
 msgid "No"
 msgstr "No"
+
+#: src/notebook-pane.vala:82
+msgid "Gpu data"
+msgstr "Gpu data"
+
+#: src/notebook-pane.vala:83 src/notebook-pane.vala:165
+msgid "Temperature"
+msgstr "Temperature"
+
+#: src/notebook-pane.vala:84 src/notebook-pane.vala:166
+#: src/notebook-pane.vala:172
+msgid "Fan speed"
+msgstr "Fan speed"
+
+#: src/notebook-pane.vala:162
+msgid "Name"
+msgstr "Name"
+
+#: src/notebook-pane.vala:163
+msgid "Driver version"
+msgstr "Driver version"
+
+#: src/notebook-pane.vala:164
+msgid "Memory used"
+msgstr "Memory used"
+
+#: src/notebook-pane.vala:167
+msgid "Timestamp"
+msgstr "Timestamp"
+
+#: src/notebook-pane.vala:168
+msgid "VBios version"
+msgstr "VBios version"
+
+#: src/notebook-pane.vala:169
+msgid "Pstate"
+msgstr "Pstate"
+
+#: src/notebook-pane.vala:170
+msgid "GPU Utilization"
+msgstr "GPU Utilization"
+
+#: src/notebook-pane.vala:171
+msgid "GPU index"
+msgstr "GPU index"
+
+#: src/notebook-pane.vala:173
+msgid "Graphics Clock"
+msgstr "Graphics Clock"
+
+#: src/notebook-pane.vala:174
+msgid "Processor Clock"
+msgstr "Processor Clock"
+
+#: src/notebook-pane.vala:308
+msgid "Automatic Speed"
+msgstr "Automatic Speed"
+
+#: src/notebook-pane.vala:319
+msgid "Save"
+msgstr "Save"
+
+#: src/notebook-pane.vala:341
+msgid "Set fan speed"
+msgstr "Set fan speed"
+
+#: src/notebook-pane.vala:540
+msgid "Fan Speed Set To "
+msgstr "Fan Speed Set To "
+
+#: src/notebook-pane.vala:563
+msgid "Fan Speed Set To Auto"
+msgstr "Fan Speed Set To Auto"
+
+#: resources/gpu-fan-control.desktop:5
+msgid "GPU Fan Control"
+msgstr ""
+
+#: resources/gpu-fan-control.desktop:9
+msgid "gpu-fan-control"
+msgstr ""
+
+#~ msgid "Refresh"
+#~ msgstr "Refresh"
+
+#~ msgid "Not supported"
+#~ msgstr "Not supported"
 
 #~ msgid "Set speed"
 #~ msgstr "Set speed"

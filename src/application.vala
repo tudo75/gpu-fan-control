@@ -39,7 +39,7 @@
         private Gtk.Button reboot_btn;
         private GLib.Settings settings;
         private const string APP_NAME = "GPU Fan Control";
-        private const string VERSION = "1.0.0";
+        private const string VERSION = "3.0.0";
         private const string APP_ID = "com.github.tudo75.gpu-fan-control";
         private const string APP_LANG_DOMAIN = "gpu-fan-control";
         private const string APP_INSTALL_PREFIX = "/usr/local";
@@ -73,11 +73,6 @@
             // congfigure i18n localization
             Intl.setlocale (LocaleCategory.ALL, "");
             string langpack_dir = Path.build_filename (APP_INSTALL_PREFIX, "share", "locale");
-            // TODO modify for production publishing
-            if (DEVEL) {
-                langpack_dir = Path.build_filename ("/", "home", "nick", "gpu-fan-control", "po");
-            }
-            print (langpack_dir + "\n");
             Intl.bindtextdomain (APP_ID, langpack_dir);
             Intl.bind_textdomain_codeset (APP_ID, "UTF-8");
             Intl.textdomain (APP_ID);
@@ -107,7 +102,7 @@
          * {@inheritDoc}
          */
         protected override void shutdown () {
-            print("exit");
+            print("exit\n");
             foreach (var id in timeout_id)
                 GLib.Source.remove (id);
             base.shutdown ();
@@ -172,7 +167,11 @@
             hbox_about_btn.pack_start (new Gtk.Label (_("About us")), true, true, 0);
             about_btn.add (hbox_about_btn);
             about_btn.clicked.connect (this.about_dialog);
-            
+/*
+            var help_btn = new Gtk.Button.from_icon_name ("dialog-question-symbolic", Gtk.IconSize.DND);
+            help_btn.clicked.connect (this.about_dialog);
+            headerbar.pack_end (help_btn);
+*/
             headerbar.pack_start (about_btn);
             window.set_titlebar (headerbar);
         }
@@ -232,7 +231,7 @@
          * Combine every part of the Application
          */
         private void create_window_structure () {
-            note_panel.set_tab_pos (Gtk.PositionType.LEFT);
+            note_panel.set_tab_pos (Gtk.PositionType.TOP);
             note_panel.popup_enable ();
             note_panel.set_scrollable (true);
 
@@ -379,7 +378,7 @@
 
                 // Output: ````
                 if (ls_stdout != null) {
-		            print ("stdout:\n" + ls_stdout);
+		            // print ("stdout:\n" + ls_stdout);
                     return true;
                 } else if (ls_stderr != null) {
 		            print ("stderr:\n" + ls_stderr);
@@ -539,7 +538,7 @@
 
             int response = popup.run ();
             popup.destroy ();
-            print ((response).to_string () + "\n");
+            // print ((response).to_string () + "\n");
             return response;
         }
     }

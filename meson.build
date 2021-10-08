@@ -1,5 +1,5 @@
 # project name and programming language
-project('com.github.tudo75.gpu-fan-control', ['vala', 'c'], version: '1.0.0')
+project('com.github.tudo75.gpu-fan-control', ['vala', 'c'], version: '3.0.0')
 
 assert('com.github.tudo75.gpu-fan-control.gschema.xml'==meson.project_name() + '.gschema.xml', 'proj name and gschema file not the same')
 

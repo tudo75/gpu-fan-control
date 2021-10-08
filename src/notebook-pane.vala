@@ -1,7 +1,7 @@
 /*
  * notebook-pane.vala
  *
- * Copyright 2021 Nicola tudino <nicola.tudino@gmail.com>
+ * Copyright 2021 Nicola Tudino
  *
  * This file is part of GpuFanControl.
  *
@@ -49,7 +49,8 @@
         private Gtk.Label gpu_processor_clock;
         // set speed toolbar
         private Gtk.Grid toolbar;
-        private Gtk.Button refresh_btn;
+        //private Gtk.Button refresh_btn;
+        private Gtk.Button auto_btn;
         private Gtk.Button set_speed_btn;
         private Gtk.Scale scale;
 
@@ -94,7 +95,8 @@
             gpu_index = new Gtk.Label ("");
             gpu_graphic_clock = new Gtk.Label ("");
             gpu_processor_clock = new Gtk.Label ("");
-            refresh_btn = new Gtk.Button ();
+            //refresh_btn = new Gtk.Button ();
+            auto_btn = new Gtk.Button ();
             set_speed_btn = new Gtk.Button ();
             scale = new Gtk.Scale.with_range (Gtk.Orientation.HORIZONTAL, 0, 100, 1);
 
@@ -134,7 +136,7 @@
             gauge.set_margin_bottom (0);
             gauge.set_margin_start (5);
             gauge.set_margin_end (5);
-            refresh_smi ();
+            this.refresh_smi ();
 
             // meter_frame.set_halign (Gtk.Align.CENTER);
             meter_frame.add (meter);
@@ -283,6 +285,7 @@
          * Constructor for the toolbar grid where are all the controls of the Application
          */
         private void init_toolbar () {
+            /*
             Gtk.Box hbox_refresh_btn = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 6);
             hbox_refresh_btn.pack_start (
                 new Gtk.Image.from_icon_name ("view-refresh-symbolic", Gtk.IconSize.DND),
@@ -293,6 +296,18 @@
             hbox_refresh_btn.pack_start (new Gtk.Label (_("Refresh")), true, true, 0);
             refresh_btn.add (hbox_refresh_btn);
             refresh_btn.clicked.connect (refresh_smi_void);
+            */
+            
+            Gtk.Box hbox_auto_btn = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 6);
+            hbox_auto_btn.pack_start (
+                new Gtk.Image.from_icon_name ("system-lock-screen-symbolic", Gtk.IconSize.DND),
+                true,
+                true,
+                0
+            );
+            hbox_auto_btn.pack_start (new Gtk.Label (_("Automatic Speed")), true, true, 0);
+            auto_btn.add (hbox_auto_btn);
+            auto_btn.clicked.connect (auto_speed);
 
             Gtk.Box hbox_set_speed_btn = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 6);
             hbox_set_speed_btn.pack_start (
@@ -321,7 +336,7 @@
             grid_set_speed.set_column_homogeneous (true);
             grid_set_speed.set_row_homogeneous (true);
             grid_set_speed.attach (scale, 0, 0, 4, 1);
-            grid_set_speed.attach (refresh_btn, 0, 1, 1, 1);
+            grid_set_speed.attach (auto_btn, 0, 1, 1, 1);
             grid_set_speed.attach (set_speed_btn, 3, 1, 1, 1);
             var frame_set_speed = new Gtk.Frame (_("Set fan speed"));
             frame_set_speed.add (grid_set_speed);
@@ -457,9 +472,11 @@
          * Dummy function for the execution of refresh_smi in a context
          * that doesn't need a return value
          */
-        private void refresh_smi_void () {
-            refresh_smi ();
+        /*
+         private void refresh_smi_void () {
+            this.refresh_smi ();
         }
+        */
 
         /**
          * get_fan_speed:
@@ -525,7 +542,30 @@
                 app.show_dialog ("error", _("Error"), app.get_error_msg ());
                 app.set_error_msg ("");
             }
-            if (!refresh_smi ()) {
+            if (!this.refresh_smi ()) {
+                app.show_dialog ("error", _("Error"), app.get_error_msg ());
+                app.set_error_msg ("");
+            };
+        }
+
+        /**
+         * auto_speed:
+         *
+         * Set fan speed to automatic.
+         *
+         * Show a dialog for success or error.
+         */
+        private void auto_speed () {
+            string gpu = "[gpu:" + id.to_string () + "]";
+            // set the gpu to profile speed
+            bool first_cmd = app.exec_command ({"nvidia-settings", "-a", gpu + "/GPUFanControlState=0"});
+            if (first_cmd) {
+                app.show_dialog ("info", _("Info"), _("Fan Speed Set To Auto"));
+            } else {
+                app.show_dialog ("error", _("Error"), app.get_error_msg ());
+                app.set_error_msg ("");
+            }
+            if (!this.refresh_smi ()) {
                 app.show_dialog ("error", _("Error"), app.get_error_msg ());
                 app.set_error_msg ("");
             };

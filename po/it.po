@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: com.github.tudo75.gpu-fan-control\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-17 20:59+0200\n"
-"PO-Revision-Date: 2021-08-17 20:59+0200\n"
+"POT-Creation-Date: 2021-10-08 16:27+0200\n"
+"PO-Revision-Date: 2021-10-08 16:29+0200\n"
 "Last-Translator: Nicola Tudino <tudo75@gmail.com>\n"
 "Language-Team: \n"
 "Language: it\n"
@@ -17,136 +17,164 @@ msgstr ""
 "X-Generator: Poedit 2.3\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-Basepath: ../src\n"
-"X-Poedit-SearchPath-0: application.vala\n"
-"X-Poedit-SearchPath-1: meter.vala\n"
+"X-Poedit-SearchPath-0: .\n"
 
-#: application.vala:124 application.vala:635 application.vala:639
-#: application.vala:655 application.vala:659 application.vala:680
-#: application.vala:684
-msgid "Error"
-msgstr "Errore"
-
-#: application.vala:152
-msgid "Gpu data"
-msgstr "Dati GPU"
-
-#: application.vala:153 application.vala:254
-msgid "Temperature"
-msgstr "Temperatura"
-
-#: application.vala:154 application.vala:255
-msgid "Fan speed"
-msgstr "Velocità della ventola"
-
-#: application.vala:203
+#: src/application.vala:167
 msgid "About us"
 msgstr "Informazioni"
 
-#: application.vala:251
-msgid "Name"
-msgstr "Nome"
-
-#: application.vala:252
-msgid "Driver version"
-msgstr "Versione dei driver"
-
-#: application.vala:253
-msgid "Memory used"
-msgstr "Memoria usata"
-
-#: application.vala:256
-msgid "Timestamp"
-msgstr "Data e ora"
-
-#: application.vala:257
-msgid "VBios version"
-msgstr "Versione del VBios"
-
-#: application.vala:258
-msgid "Pstate"
-msgstr "Pstate"
-
-#: application.vala:259
-msgid "GPU Utilization"
-msgstr "Utilizzo della GPU"
-
-#: application.vala:260
-msgid "GPU index"
-msgstr "Indice della GPU"
-
-#: application.vala:364
+#: src/application.vala:187
 msgid "Initialize Nvidia Xconfig"
 msgstr "Inizializza Nvidia Xconfig"
 
-#: application.vala:377
+#: src/application.vala:200
 msgid "Reboot the system"
 msgstr "Riavvia il sistema"
 
-#: application.vala:395
-msgid "Refresh"
-msgstr "Aggiorna"
-
-#: application.vala:406
-msgid "Save"
-msgstr "Salva"
-
-#: application.vala:410
+#: src/application.vala:218
 msgid "First run config"
-msgstr "Config. iniziale"
+msgstr "Configurazione iniziale"
 
-#: application.vala:425
-msgid "Set fan speed"
-msgstr "Imposta velocità"
-
-#: application.vala:508
-msgid "Not supported"
-msgstr "Non supportato"
-
-#: application.vala:627 application.vala:678
+#. checking if nvidia-smi is installed
+#. allowing the gpu to overclock manually
+#. success message
+#: src/application.vala:407 src/notebook-pane.vala:540
+#: src/notebook-pane.vala:563
 msgid "Info"
 msgstr "Informazioni"
 
-#: application.vala:627
+#: src/application.vala:407
 msgid "Success! New X configuration file written to /etc/X11/xorg.conf"
 msgstr ""
 "OK! Il nuovo file di configurazione di X è stato scritto in  /etc/X11/xorg."
 "conf"
 
-#: application.vala:652
+#: src/application.vala:415 src/application.vala:419 src/application.vala:435
+#: src/application.vala:439 src/notebook-pane.vala:113
+#: src/notebook-pane.vala:542 src/notebook-pane.vala:546
+#: src/notebook-pane.vala:565 src/notebook-pane.vala:569
+msgid "Error"
+msgstr "Errore"
+
+#: src/application.vala:432
 msgid "Reboot"
 msgstr "Riavvia"
 
-#: application.vala:652
+#: src/application.vala:432
 msgid "Do you want to reboot?"
 msgstr "Vuoi riavviare?"
 
-#: application.vala:659
+#: src/application.vala:439
 msgid "Reboot is required to implement the changes"
 msgstr "E' richiesto il riavvio per applicare le modifiche"
 
-#: application.vala:678
-msgid "Fan Speed Set To "
-msgstr "Velocità della ventola impostata a "
-
-#: application.vala:709
+#: src/application.vala:464 resources/gpu-fan-control.desktop:6
 msgid "GUI fan controller for Nvidia GPU"
 msgstr "GUI per la gestione delle schede video Nvidia"
 
-#: application.vala:710
+#: src/application.vala:465
 msgid "Copyright"
 msgstr "Copyright @ 2021 Nicola Tudino"
 
-#: application.vala:746 application.vala:751
+#: src/application.vala:501 src/application.vala:506
 msgid "Close"
 msgstr "Chiudi"
 
-#: application.vala:756
+#: src/application.vala:511
 msgid "Yes"
 msgstr "Si"
 
-#: application.vala:757
+#. return 1
+#: src/application.vala:512
 msgid "No"
 msgstr "No"
+
+#: src/notebook-pane.vala:82
+msgid "Gpu data"
+msgstr "Dati GPU"
+
+#: src/notebook-pane.vala:83 src/notebook-pane.vala:165
+msgid "Temperature"
+msgstr "Temperatura"
+
+#: src/notebook-pane.vala:84 src/notebook-pane.vala:166
+#: src/notebook-pane.vala:172
+msgid "Fan speed"
+msgstr "Velocità della ventola"
+
+#: src/notebook-pane.vala:162
+msgid "Name"
+msgstr "Nome"
+
+#: src/notebook-pane.vala:163
+msgid "Driver version"
+msgstr "Versione dei driver"
+
+#: src/notebook-pane.vala:164
+msgid "Memory used"
+msgstr "Memoria usata"
+
+#: src/notebook-pane.vala:167
+msgid "Timestamp"
+msgstr "Data e ora"
+
+#: src/notebook-pane.vala:168
+msgid "VBios version"
+msgstr "Versione del VBios"
+
+#: src/notebook-pane.vala:169
+msgid "Pstate"
+msgstr "Pstate"
+
+#: src/notebook-pane.vala:170
+msgid "GPU Utilization"
+msgstr "Utilizzo della GPU"
+
+#: src/notebook-pane.vala:171
+msgid "GPU index"
+msgstr "Indice della GPU"
+
+#: src/notebook-pane.vala:173
+msgid "Graphics Clock"
+msgstr "Velocità di clock della GPU"
+
+#: src/notebook-pane.vala:174
+msgid "Processor Clock"
+msgstr "Velocità di clock del processore"
+
+#: src/notebook-pane.vala:308
+msgid "Automatic Speed"
+msgstr "Velocità automatica"
+
+#: src/notebook-pane.vala:319
+msgid "Save"
+msgstr "Salva"
+
+#: src/notebook-pane.vala:341
+msgid "Set fan speed"
+msgstr "Imposta velocità"
+
+#: src/notebook-pane.vala:540
+msgid "Fan Speed Set To "
+msgstr "Velocità della ventola impostata a "
+
+#: src/notebook-pane.vala:563
+msgid "Fan Speed Set To Auto"
+msgstr "Velocità della ventola impostata su automatico"
+
+#: resources/gpu-fan-control.desktop:5
+msgid "GPU Fan Control"
+msgstr ""
+
+#: resources/gpu-fan-control.desktop:9
+msgid "gpu-fan-control"
+msgstr ""
+
+#~ msgid "Refresh"
+#~ msgstr "Aggiorna"
+
+#~ msgid "Not supported"
+#~ msgstr "Non supportato"
 
 #~ msgid "Set speed"
 #~ msgstr "Imposta velocità"
